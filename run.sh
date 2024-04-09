@@ -1,0 +1,1 @@
+docker compose -f tools.docker-compose.yaml run --build --rm -it -p 65535:65535 xcaddy run --config Caddyfile

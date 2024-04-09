@@ -12,10 +12,10 @@ import (
 
 func init() {
 	caddy.RegisterModule(MyMod{})
-	httpcaddyfile.RegisterHandlerDirective("my_mod", parseCaddyFile)
+	httpcaddyfile.RegisterHandlerDirective("my_mod", parseMyModCaddyfile)
 }
 
-func parseCaddyFile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error) {
+func parseMyModCaddyfile(h httpcaddyfile.Helper) (caddyhttp.MiddlewareHandler, error) {
 	var m MyMod
 	err := m.UnmarshalCaddyfile(h.Dispenser)
 	return m, err
@@ -54,14 +54,14 @@ func (m *MyMod) Provision(ctx caddy.Context) error {
 
 // ServeHTTP implements caddyhttp.MiddlewareHandler.
 func (m MyMod) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhttp.Handler) error {
-	next.ServeHTTP(w, r)
-
-	w.Header().Add("X-Hello-World", m.HeaderValue)
+	w.Header().Set("X-Hello-World", m.HeaderValue)
 
 	m.logger.Info("added header to response",
 		zap.String("header_key", "X-Hello-World"),
 		zap.String("header_value", m.HeaderValue),
 	)
+
+	next.ServeHTTP(w, r)
 
 	return nil
 }

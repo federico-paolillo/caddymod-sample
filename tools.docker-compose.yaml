@@ -1,0 +1,13 @@
+version: "3"
+services:
+  xcaddy:
+    build:
+      dockerfile: xcaddy.Dockerfile
+    volumes:
+      - ./src/:/go/my_mod/
+      - ./testdata/Caddyfile:/go/my_mod/Caddyfile
+      - godir:/go
+    ports:
+      - 65535:65535
+volumes:
+  godir:

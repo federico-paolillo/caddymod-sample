@@ -1,0 +1,13 @@
+{
+	log {
+		output stdout
+		format console
+	}
+}
+
+http://localhost:65535 {
+	route {
+		my_mod "My-Mod-Header"
+		respond "Hello, world!"
+	}
+}
